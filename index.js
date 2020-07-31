@@ -49,6 +49,7 @@ const question = function () {
                     views("department")
                     break;
                 case "add employee":
+                    addEmployee()
                     console.log
                     break;
                 case "add department":
@@ -90,3 +91,18 @@ function views(table) {
         again();
     });
 };
+function addEmployee() {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "employee first name",
+            name: "firstname"
+        },
+        {
+            type: "input",
+            message: "employee last name",
+            name: "last name"
+        }
+    ])
+        .then(function (again))
+}
