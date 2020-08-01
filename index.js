@@ -53,9 +53,11 @@ const question = function () {
                     console.log
                     break;
                 case "add department":
+                    addDepartment()
                     console.log
                     break;
                 case "add role":
+                    addRole()
                     console.log
                     break;
                 case "update employee role":
@@ -105,4 +107,24 @@ function addEmployee() {
         }
     ])
         .then(function (again))
+}
+function addDepartment() {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "New department name",
+            name: "department name"
+        },
+    ])
+        .then(function (again))
+}
+function addRole() {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "New role",
+            name: "new role"
+        },
+    ])
+        .then(function { again })
 }
