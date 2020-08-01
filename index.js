@@ -106,7 +106,20 @@ function addEmployee() {
             name: "last name"
         }
     ])
-        .then(function (again))
+        .then(function again() {
+            inquirer.prompt({
+                type: "confirm",
+                name: "agains",
+                message: "Do you want to go back??",
+            }).then(function ({ agains }) {
+                if (agains === true) {
+                    question()
+                } else {
+                    return false
+                }
+
+            })
+        })
 }
 function addDepartment() {
     inquirer.prompt([
@@ -116,7 +129,20 @@ function addDepartment() {
             name: "department name"
         },
     ])
-        .then(function (again))
+        .then(function again() {
+            inquirer.prompt({
+                type: "confirm",
+                name: "agains",
+                message: "Do you want to go back??",
+            }).then(function ({ agains }) {
+                if (agains === true) {
+                    question()
+                } else {
+                    return false
+                }
+
+            })
+        })
 }
 function addRole() {
     inquirer.prompt([
@@ -126,5 +152,18 @@ function addRole() {
             name: "new role"
         },
     ])
-        .then(function { again })
+        .then(function again() {
+            inquirer.prompt({
+                type: "confirm",
+                name: "agains",
+                message: "Do you want to go back??",
+            }).then(function ({ agains }) {
+                if (agains === true) {
+                    question()
+                } else {
+                    return false
+                }
+
+            })
+        })
 }
