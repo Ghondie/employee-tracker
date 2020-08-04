@@ -87,39 +87,57 @@ function again() {
     })
 }
 function views(table) {
-    var query = "SELECT * FROM ?";
-    connection.query(query, [table], function (err, res) {
+    var query = `SELECT * FROM ${table}`;
+    connection.query(query, function (err, res) {
         if (err) throw err;
+        console.table(res)
         again();
     });
 };
 function addEmployee() {
-    inquirer.prompt([
-        {
-            type: "input",
-            message: "employee first name",
-            name: "firstname"
-        },
-        {
-            type: "input",
-            message: "employee last name",
-            name: "last name"
-        }
-    ])
-        .then(function again() {
-            inquirer.prompt({
-                type: "confirm",
-                name: "agains",
-                message: "Do you want to go back??",
-            }).then(function ({ agains }) {
-                if (agains === true) {
-                    question()
-                } else {
-                    return false
-                }
-
-            })
-        })
+    connection.query("SELECT id, first_name FROM employee WHERE role_id BETWEEN 1 and 3",
+        function (err, response) {
+            if (err) throw err;
+            const mgrarr = response.map(row => row.first_name) || []
+            connection.query("SELECT id, title FROM role",
+                function (err, res) {
+                    if (err) throw err;
+                    const rolearr = res.map(row => row.title)
+                    inquirer.prompt([
+                        {
+                            type: "input",
+                            message: "employee first name",
+                            name: "firstname"
+                        },
+                        {
+                            type: "input",
+                            message: "employee last name",
+                            name: "lastname"
+                        },
+                        {
+                            type: "list",
+                            message: "what role",
+                            name: "role",
+                            choices: rolearr
+                        },
+                        {
+                            type: "list",
+                            message: "who is you manager",
+                            name: "mgr",
+                            choices: [...mgrarr, "NO BOSS"]
+                        },
+                    ])
+                        .then(function (ans) {
+                            const roleId = res.filter(row => row.title === ans.role)[0].id
+                            const mgrId = response.filter(row => row.name === ans.mgr)[0].id || null
+                            connection.query("SELECT id, title FROM role",
+                                function (err, res) {
+                                    if (err) throw err;
+                                    again();
+                                })
+                        });
+                });
+        });
 }
 function addDepartment() {
     inquirer.prompt([
@@ -129,20 +147,10 @@ function addDepartment() {
             name: "department name"
         },
     ])
-        .then(function again() {
-            inquirer.prompt({
-                type: "confirm",
-                name: "agains",
-                message: "Do you want to go back??",
-            }).then(function ({ agains }) {
-                if (agains === true) {
-                    question()
-                } else {
-                    return false
-                }
-
-            })
+        .then(function (ans) {
+            again();
         })
+
 }
 function addRole() {
     inquirer.prompt([
@@ -152,18 +160,7 @@ function addRole() {
             name: "new role"
         },
     ])
-        .then(function again() {
-            inquirer.prompt({
-                type: "confirm",
-                name: "agains",
-                message: "Do you want to go back??",
-            }).then(function ({ agains }) {
-                if (agains === true) {
-                    question()
-                } else {
-                    return false
-                }
-
-            })
+        .then(function (ans) {
+            again();
         })
 }
